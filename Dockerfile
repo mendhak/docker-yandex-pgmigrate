@@ -1,9 +1,7 @@
-FROM python:3.8-alpine
+FROM python:stretch
 
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev \
-    && pip install --no-cache-dir  yandex-pgmigrate \
-    && apk del --no-cache postgresql-dev gcc musl-dev .build-deps
+RUN apt-get -y update && apt-get install -y --no-install-recommends libpq-dev \
+  && pip install psycopg2-binary yandex-pgmigrate \
+  && rm -rf /var/lib/apt/lists/*
 
-
-ENTRYPOINT [ "pgmigrate" ] 
-
+ENTRYPOINT ["pgmigrate"]
